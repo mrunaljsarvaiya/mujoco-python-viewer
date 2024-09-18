@@ -194,10 +194,6 @@ class MujocoViewer(Callbacks):
         g.objtype = mujoco.mjtObj.mjOBJ_UNKNOWN
         g.objid = -1
         g.category = mujoco.mjtCatBit.mjCAT_DECOR
-        g.texid = -1
-        g.texuniform = 0
-        g.texrepeat[0] = 1
-        g.texrepeat[1] = 1
         g.emission = 0
         g.specular = 0.5
         g.shininess = 0.5
@@ -377,7 +373,7 @@ class MujocoViewer(Callbacks):
             mujoco.mjr_readPixels(img, None, self.viewport, self.ctx)
             return np.flipud(img)
 
-    def render(self):
+    def render(self, clear_markers=True):
         if self.render_mode == 'offscreen':
             raise NotImplementedError(
                 "Use 'read_pixels()' for 'offscreen' mode.")
@@ -468,7 +464,8 @@ class MujocoViewer(Callbacks):
                 self._loop_count -= 1
 
         # clear markers
-        self._markers[:] = []
+        if clear_markers:
+            self._markers[:] = []
 
         # apply perturbation (should this come before mj_step?)
         self.apply_perturbations()
